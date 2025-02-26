@@ -38,21 +38,23 @@ pkg: go.withmatt.com/fasttime
 cpu: Apple M1 Max
 BenchmarkTime
 BenchmarkTime/time.Now
-BenchmarkTime/time.Now-10               30490806                38.96 ns/op
+BenchmarkTime/time.Now-10               29940246                39.93 ns/op
 BenchmarkTime/fasttime.Now
-BenchmarkTime/fasttime.Now-10           61417069                19.75 ns/op
+BenchmarkTime/fasttime.Now-10           59820660                19.83 ns/op
 BenchmarkTime/fasttime.Clock.Now
-BenchmarkTime/fasttime.Clock.Now-10             1000000000               0.6742 ns/op
+BenchmarkTime/fasttime.Clock.Now-10             1000000000               0.6755 ns/op
 BenchmarkTime/time.Since
-BenchmarkTime/time.Since-10                     64346902                18.90 ns/op
+BenchmarkTime/time.Since-10                     63852006                18.77 ns/op
 BenchmarkTime/fasttime.Since
-BenchmarkTime/fasttime.Since-10                 61757910                19.50 ns/op
+BenchmarkTime/fasttime.Since-10                 60776544                19.42 ns/op
+BenchmarkTime/fasttime.Clock.Since
+BenchmarkTime/fasttime.Clock.Since-10           1000000000               0.6520 ns/op
 BenchmarkTime/time.Now.Since
-BenchmarkTime/time.Now.Since-10                 17892777                67.43 ns/op
+BenchmarkTime/time.Now.Since-10                 18779966                64.79 ns/op
 BenchmarkTime/fasttime.Now.Since
-BenchmarkTime/fasttime.Now.Since-10             32496326                36.88 ns/op
+BenchmarkTime/fasttime.Now.Since-10             32429546                36.85 ns/op
 BenchmarkTime/fasttime.Instant.ToTime
-BenchmarkTime/fasttime.Instant.ToTime-10        317467594                3.800 ns/op
+BenchmarkTime/fasttime.Instant.ToTime-10        332593658                3.780 ns/op
 PASS
-ok      go.withmatt.com/fasttime        9.794s
+ok      go.withmatt.com/fasttime        11.562s
 ```

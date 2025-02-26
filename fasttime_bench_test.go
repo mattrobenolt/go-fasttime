@@ -48,6 +48,15 @@ func BenchmarkTime(b *testing.B) {
 		}
 	})
 
+	b.Run("fasttime.Clock.Since", func(b *testing.B) {
+		clock := fasttime.NewClock(100 * time.Millisecond)
+		defer clock.Stop()
+		a := clock.Now()
+		for range b.N {
+			durationSink = clock.Since(a)
+		}
+	})
+
 	b.Run("time.Now.Since", func(b *testing.B) {
 		for range b.N {
 			durationSink = time.Since(time.Now())
