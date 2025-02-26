@@ -1,21 +1,9 @@
 # fasttime
 
+[![Go Reference](https://pkg.go.dev/badge/go.withmatt.com/fasttime.svg)](https://pkg.go.dev/go.withmatt.com/fasttime)
+
 ```go
 import "go.withmatt.com/fasttime"
-
-// Get a new Instant representing current time with absolute precision.
-start := fasttime.Now()
-fasttime.Since(start)
-
-// Convert the Instant into a traditional time.Time object if needed.
-start.ToTime()
-
-// Create a new cached clock with 100ms precision.
-clock := fasttime.NewClock(100*time.Millisecond)
-defer clock.Stop()
-
-// Get our new cached time as an Instant.
-clock.Now()
 ```
 
 `fasttime.Now()` is much faster than builtin `time.Now()`, and works very similarly
