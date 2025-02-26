@@ -1,10 +1,7 @@
-//go:build go1.24 && goexperiment.synctest
-
 package fasttime_test
 
 import (
 	"testing"
-	"testing/synctest"
 	"time"
 
 	"go.withmatt.com/fasttime"
@@ -15,45 +12,47 @@ func stubTime(t *testing.T) {
 	t.Cleanup(func() { fasttime.ReplaceMonotonicRoot(before) })
 }
 
-func TestMonotonic(t *testing.T) {
-	synctest.Run(func() {
-		stubTime(t)
-
-		now := fasttime.Now()
-
-		if time.Now() != now.ToTime() {
-			t.Errorf("ToTime() didn't match time.Now(), expected: %q, got %q", time.Now(), now.ToTime())
-		}
-
-		time.Sleep(10 * time.Millisecond)
-
-		if d := fasttime.Since(now); d != 10*time.Millisecond {
-			t.Errorf("delta should have been 10ms, got %s", d)
-		}
-	})
+func assertEqual(t *testing.T, got, expected, margin time.Duration) {
+	if (got - expected).Abs() > margin {
+		t.Errorf("durations not equal, got %q, expected %q", got, expected)
+	}
 }
 
-func TestCached(t *testing.T) {
-	synctest.Run(func() {
-		c := fasttime.NewClock(time.Second)
-		defer c.Stop()
+func testMonotonic(t *testing.T, approx bool) {
+	stubTime(t)
 
-		start := c.Now()
-		time.Sleep(100 * time.Millisecond)
-		delta := c.Now().Sub(start)
-		if delta != 0 {
-			t.Errorf("time should not have advanced yet, expected 0 got: %q", delta)
-		}
-		time.Sleep(901 * time.Millisecond)
-		delta = c.Since(start)
-		if delta != time.Second {
-			t.Errorf("time should have advanced 1 second, got: %q", delta)
-		}
+	var margin time.Duration
+	if approx {
+		margin = 3 * time.Millisecond
+	}
 
-		time.Sleep(100 * time.Millisecond)
-		delta = c.Since(start)
-		if delta != time.Second {
-			t.Errorf("time should have advanced 1 second, got: %q", delta)
-		}
-	})
+	now := fasttime.Now()
+	timeNow := time.Now()
+
+	assertEqual(t, 0, timeNow.Sub(now.ToTime()), margin)
+
+	time.Sleep(10 * time.Millisecond)
+
+	assertEqual(t, fasttime.Since(now), 10*time.Millisecond, margin)
+}
+
+func testCached(t *testing.T, approx bool) {
+	var margin time.Duration
+	if approx {
+		margin = 3 * time.Millisecond
+	}
+
+	c := fasttime.NewClock(time.Second)
+	defer c.Stop()
+
+	start := c.Now()
+
+	time.Sleep(100 * time.Millisecond)
+	assertEqual(t, c.Since(start), 0, margin)
+
+	time.Sleep(901 * time.Millisecond)
+	assertEqual(t, c.Since(start), time.Second, margin)
+
+	time.Sleep(100 * time.Millisecond)
+	assertEqual(t, c.Since(start), time.Second, margin)
 }
