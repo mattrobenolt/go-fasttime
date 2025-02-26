@@ -1,4 +1,4 @@
-//go:build goexperiment.synctest
+//go:build go1.24 && goexperiment.synctest
 
 package fasttime_test
 
