@@ -13,11 +13,12 @@ func (i Instant) ToTime() time.Time {
 	return monotonicRoot.Add(time.Duration(i))
 }
 
-// Sub subtracts two [Instant]s, similar to [time.Time.Sub].
+// Sub subtracts two [Instant] s, similar to [time.Time.Sub].
 func (i Instant) Sub(u Instant) time.Duration {
 	return time.Duration(i - u)
 }
 
+// String formats the [Instant] using the underlying [time.Time.String].
 func (i Instant) String() string {
 	return i.ToTime().String()
 }
@@ -27,7 +28,7 @@ func Now() Instant {
 	return Instant(time.Since(monotonicRoot))
 }
 
-// Since is roughly equivalent to [time.Since], but operates on [Instant]s.
+// Since is roughly equivalent to [time.Since], but operates on [Instant] s.
 func Since(i Instant) time.Duration {
 	return Now().Sub(i)
 }

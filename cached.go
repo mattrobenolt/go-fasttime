@@ -15,9 +15,9 @@ type Clock struct {
 	now    atomic.Int64
 }
 
-// NewClock creates a new Clock configured to tick at approximately
-// granularity intervals. Clock is running when created, and may be stopped
-// by calling Stop. A stopped Clock cannot be resumed.
+// NewClock creates a new [Clock] configured to tick at approximately
+// granularity intervals. [Clock] is running when created, and may be stopped
+// by calling [Clock.Stop]. A stopped [Clock] cannot be resumed.
 func NewClock(granularity time.Duration) *Clock {
 	ctx, cancel := context.WithCancel(context.Background())
 	c := &Clock{ctx: ctx, cancel: cancel}
@@ -26,14 +26,20 @@ func NewClock(granularity time.Duration) *Clock {
 	return c
 }
 
-// Now returns an Instant that represents the current cached time.
-// The Instant returned will never be in the future, but will always be
+// Now returns an [Instant] that represents the current cached time.
+// The [Instant] returned will never be in the future, but will always be
 // less than or equal to the actual current time.
 func (c *Clock) Now() Instant {
 	return Instant(c.now.Load())
 }
 
-// Stop stops the Clock ticker and cannot be resumed.
+// Since returns [time.Duration] since the [Instant] relative to the [Clock]'s
+// current time.
+func (c *Clock) Since(i Instant) time.Duration {
+	return c.Now().Sub(i)
+}
+
+// Stop stops the [Clock] ticker and cannot be resumed.
 func (c *Clock) Stop() {
 	c.cancel()
 }

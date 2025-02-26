@@ -45,13 +45,13 @@ func TestCached(t *testing.T) {
 			t.Errorf("time should not have advanced yet, expected 0 got: %q", delta)
 		}
 		time.Sleep(901 * time.Millisecond)
-		delta = c.Now().Sub(start)
+		delta = c.Since(start)
 		if delta != time.Second {
 			t.Errorf("time should have advanced 1 second, got: %q", delta)
 		}
 
 		time.Sleep(100 * time.Millisecond)
-		delta = c.Now().Sub(start)
+		delta = c.Since(start)
 		if delta != time.Second {
 			t.Errorf("time should have advanced 1 second, got: %q", delta)
 		}
